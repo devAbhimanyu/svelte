@@ -1,52 +1,57 @@
 <script>
-  import ContactCard from "./components/compCard/ContactCard.svelte";
+import ContactCard from "./components/contactCard/ContactCard.svelte";
 
-  let name = "abc";
+  let name = "New";
   let title = "";
   let image = "";
   let description = "";
-  let age = 30;
-
-
-  /**
-   * this is called a labeled statement, which has been used by svelte, for dynamic value updation
-   * when a variable values changes, it will automatically trigger the event to update the labeled statement
-   * it is best practice to have these labebel variables configured for dynamic values, rather than in the markup
-   */
-  $: uppercaseName = name.toUpperCase();
-
-  $: console.log(name);
-
-  function incrementAge() {
-    age += 1;
-  }
-
-
-  function inputHandler(event) {
-    const enteredValue = event.target.value;
-    name = enteredValue;
+  let formState = "";
+  
+  function createContact(){
+	  if(name.trim().length=== 0||title.trim().length=== 0||image.trim().length=== 0||description.trim().length=== 0){
+		  formState="invalid";
+		  return;
+	  }
+	  formState='done';
   }
 </script>
 
 <style>
-  h1 {
-    color: purple;
+  #form {
+    width: 30rem;
+    max-width: 100%;
   }
 </style>
 
-<h1>Hello {uppercaseName}, my age is {age}!</h1>
-<button on:click={incrementAge}>Change Age</button>
-<!-- bind is used for two way binding, it is not recommended and there should be a reason for using this-->
-<!-- <input type="text" bind:value={name}> -->
-<!-- uni direction data binding is similar to react, use react -->
-<!-- <input type="text" value="{name}" on:input="{inputHandler}"> -->
-<input type="text" bind:value={name} />
-<input type="text" bind:value={title} />
-<input type="text" bind:value={image} />
-<textarea rows="3" bind:value={description} />
+<div id="form">
+  <div class="form-control">
+    <label for="userName">User Name</label>
+    <input type="text" bind:value={name} id="userName" />
+  </div>
+  <div class="form-control">
+    <label for="jobTitle">Job Title</label>
+    <input type="text" bind:value={title} id="jobTitle" />
+  </div>
+  <div class="form-control">
+    <label for="image">Image URL</label>
+    <input type="text" bind:value={image} id="image" />
+  </div>
+  <div class="form-control">
+    <label for="desc">Description</label>
+    <textarea rows="3" bind:value={description} id="desc" />
+  </div>
+  <button on:click="{createContact}">Create Contact</button>
+</div>
 
-<ContactCard 
+{#if formState==='done'}
+	<ContactCard 
 	userName={name} 
 	jobTitle={title} 
 	{description} 
 	userImage={image} />
+{:else if formState==='invalid'}
+<p>Please fill all the fields</p>
+{:else}
+<p>Enter all values before filling form</p>	
+{/if}
+
