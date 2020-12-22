@@ -60,6 +60,8 @@ import ContactCard from "./components/contactCard/ContactCard.svelte";
     <textarea rows="3" bind:value={description} id="desc" />
   </div>
   <button on:click="{createContact}">Create Contact</button>
+  <!-- once is a modifier, this will only trigger the function once -->
+  <button on:click|once="{createContact}">Create Contact Only Once</button>
 </div>
 
 {#if formState==='invalid'}
@@ -70,7 +72,7 @@ import ContactCard from "./components/contactCard/ContactCard.svelte";
 
 <!-- (contact.id) acts as the key, to manage changes -->
 {#each contactList as contact,index (contact.id)}
-  <h1 on:click="{removeContact.bind(this,index)}"># {index+1}</h1> 
+  <h1 on:click="{()=>removeContact(index)}"># {index+1}</h1> 
 	<ContactCard 
 	userName={contact.name} 
 	jobTitle={contact.jobTitle} 
