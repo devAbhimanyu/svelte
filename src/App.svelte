@@ -5,14 +5,33 @@ import ContactCard from "./components/contactCard/ContactCard.svelte";
   let title = "";
   let image = "";
   let description = "";
+  let contactList = [];
   let formState = "";
+  let id = 0
   
   function createContact(){
 	  if(name.trim().length=== 0||title.trim().length=== 0||image.trim().length=== 0||description.trim().length=== 0){
 		  formState="invalid";
 		  return;
 	  }
+    contactList=[...contactList,{
+      id:`contact${id}`,
+      name,
+      jobTitle:title,
+      imageUrl:image,
+      desc:description
+    }]
+    id+=1;
+    // name = "New";
+    // title = "";
+    // image = "";
+    // description = "";
 	  formState='done';
+  }
+
+  function removeContact(i){
+    const list = contactList.splice(i,1);
+    contactList = contactList;
   }
 </script>
 
@@ -43,15 +62,20 @@ import ContactCard from "./components/contactCard/ContactCard.svelte";
   <button on:click="{createContact}">Create Contact</button>
 </div>
 
-{#if formState==='done'}
-	<ContactCard 
-	userName={name} 
-	jobTitle={title} 
-	{description} 
-	userImage={image} />
-{:else if formState==='invalid'}
+{#if formState==='invalid'}
 <p>Please fill all the fields</p>
 {:else}
 <p>Enter all values before filling form</p>	
 {/if}
 
+<!-- (contact.id) acts as the key, to manage changes -->
+{#each contactList as contact,index (contact.id)}
+  <h1 on:click="{removeContact.bind(this,index)}"># {index+1}</h1> 
+	<ContactCard 
+	userName={contact.name} 
+	jobTitle={contact.jobTitle} 
+	description={contact.desc}
+  userImage={contact.imageUrl} />
+{:else}
+  <p>No contacts found</p>
+{/each}

@@ -3,6 +3,8 @@
   export let jobTitle;
   export let description;
   export let userImage;
+
+  let initialState = userName;
 </script>
 
 <style>
@@ -69,7 +71,7 @@
       <img src={userImage} alt={userName} />
     </div>
     <div class="user-data">
-      <h1>{userName}</h1>
+      <h1>{userName } / {initialState}</h1>
       <h2>{jobTitle}</h2>
     </div>
   </header>
